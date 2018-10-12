@@ -107,19 +107,39 @@ index.html
 <body>
   <!-- entry point of the app -->
   <div id="root"></div>
-  <!-- bundle is create by webpack -->
-  <script src="bundle/bundle.js"></script>
+  <!-- bundle is create by parcel -->
+  <script src="./main.jsx"></script>
 </body>
 ```
 
 Install dependencies
 
 ```bash
-yarn install react react-dom
-yarn install babel-preset-react --dev
+# Dependencies
+yarn add react react-dom
+
+# Dev-Dependecies
+yarn add parcel-bundler --dev
+yarn install babel-core babel-preset-react --dev
 ```
 
-index.js
+<!-- prettier-ignore -->
+***
+
+## babel
+
+.babelrc
+
+```json
+{
+  "presets": ["react"]
+}
+```
+
+<!-- prettier-ignore -->
+***
+
+main.jsx
 
 ```jsx
 // import the dependenciess
@@ -136,60 +156,14 @@ ReactDOM.render(<App />, document.getElementById('root'));
 <!-- prettier-ignore -->
 ***
 
-## babel
-
-Install dependencies
-
-```bash
-yarn install babel-preset-react --dev
-```
-
-.babelrc
-
-```json
-{
-  "presets": ["env", "react"]
-}
-```
-
-<!-- prettier-ignore -->
-***
-
-## webpack
-
-webpack.conf.js
-
-```bash
-module.exports = {
-  entry: './src/index.js',
-  output: { path: __dirname, filename: 'bundle.js' },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
-};
-```
-
-<!-- prettier-ignore -->
-***
-
 ## Build and startup
 
 package.json
 
 ```json
 "scripts": {
-    "serve": "webpack-dev-server --open --inline --hot",
-    "build": "webpack",
-    "build:prod": "webpack -p",
+    "serve": "parcel serve src/index.html",
+    "build": "parcel build src/index.html --no-minify",
 }
 ```
 
@@ -201,9 +175,6 @@ yarn serve
 
 # build (development)
 yarn build
-
-# build for production
-yarn build:prod
 ```
 
 ---
@@ -264,18 +235,53 @@ See also [Babel REPL](https://babeljs.io/repl/#?babili=false&browsers=&build=&bu
 <!-- prettier-ignore -->
 ***
 
+## Simple component
+
+```js
+function App() {
+    return <h1>Hello World of React<h1>
+}
+
+ReactDom.render(<App/>, document.getElementById('app'));
+```
+
+```js
+// arrow function expression
+const App = () => <h1>Hello World of React<h1>
+```
+
+<!-- prettier-ignore -->
+***
+
+## Simple component
+
+```
+// return jsx (with multi-line expression)
+const App = () => {
+    return (
+        <h1>
+            Hello World of React
+        <h1>
+    )
+}
+```
+
+<!-- prettier-ignore -->
+***
+
 ## One Root Element
 
 ```jsx
-const template = <h1>My Title</h1><p>May the Force be with you</p>;
+const App = () => <h1>My Title</h1><p>Welcome</p>;
 
-// --> ERROR: Adjacent JSX elements must be wrapped in an enclosing tag
+// ERROR: Adjacent JSX elements must be
+// wrapped in an enclosing tag
 ```
 
 Valid JSX has only one root element
 
 ```js
-const template = (
+const App = () => (
   <div>
     <h1>My Title</h1>
     <p>May the Force be with you</p>
@@ -292,8 +298,6 @@ const template = (
 
 ```jsx
 const name = 'peter';
-const url = 'https://placeimg.com/200/200/animals';
-const imageWidth = 500;
 const customer = {
   name: 'euricom',
   location: 'mechelen',
@@ -301,15 +305,18 @@ const customer = {
 function formatCustomer(customer) {
     return `${customer.name}: ${customer.location}`;
 }
-const template = (
-  <div>
-    <p>{user}</p>
-    <p>{customer.name}</p>
-    <p>{user.toUpperCase()}</p>
-    <p>{formatCustomer(customer)</p>
-    <img src={url} />
-  </div>
-);
+const App = () => {
+    const url = 'https://placeimg.com/200/200/animals';
+    return (
+        <div>
+            <p>{user}</p>
+            <p>{customer.name}</p>
+            <p>{user.toUpperCase()}</p>
+            <p>{formatCustomer(customer)</p>
+            <img src={url} />
+        </div>
+    );
+}
 ```
 
 Everything between `{ .... }` is JavaScript code.
@@ -330,18 +337,6 @@ Booleans, Null, and Undefined Are Ignored
 <div>{true}</div>
 ```
 
-A comment
-
-```jsx
-<!-- This wont work -->
-{ /* Single line: Single line */ }
-{ /* Multi line: this will work also :)
-    <div>
-
-    </div>
- */}
-```
-
 An object can't be rendered
 
 ```jsx
@@ -356,13 +351,13 @@ An object can't be rendered
 ternary operator
 
 ```jsx
-const template = <p>User: {user.name ? user.name : 'no-name'}</p>;
+const App = () => <p>User: {user.name ? user.name : '-'}</p>;
 ```
 
 logical and operator
 
 ```jsx
-const template = (
+const userAge = (
 	{user.age && user.age >= 18 && <p>Age: user.age</p>}
 )
 ```
@@ -370,45 +365,23 @@ const template = (
 <!-- prettier-ignore -->
 ***
 
-### Conditional rendering
+## Conditional rendering
 
-switch
-
-```jsx
-const template = notification({ text: 'hello', state: 'info' });
-
-function notification({ text, state }) {
-  switch (state) {
-    case 'info':
-      return <Info text={text} />;
-    case 'warning':
-      return <Warning text={text} />;
-  }
-  return null;
+```js
+renderName(name) {
+    return <h1>{myName}</h1>
 }
-```
 
-<!-- prettier-ignore -->
-***
+renderEmpty() {
+    return <h1>No Name</h1>
+}
 
-### Conditional rendering
-
-inline switch (with iife)
-
-```jsx
-const template = (
-  <div>
-    {(function() {
-      switch (state) {
-        case 'info':
-          return <Info text={text} />;
-        case 'warning':
-          return <Warning text={text} />;
-      }
-      return null;
-    })()}
-  </div>
-);
+const App = () => {
+    if (this.myName) {
+        return renderName(this.myName);
+    }
+    return renderEmpty();
+}
 ```
 
 need more?
@@ -419,115 +392,6 @@ need more?
 ***
 
 ## Arrays
-
-Render a Array
-
-```jsx
-const names = ['john', 'peter', 'bob'];
-const template = (
-	names: { names }
-)
-```
-
-Ouput
-
-```
-names: johnpeterbob
-```
-
-Identical to
-
-```jsx
-const template = (
-	names: {'john'}{'peter'}{'bob'}
-)
-```
-
-<!-- prettier-ignore -->
-***
-
-### Arrays
-
-You can render JSX in JSX
-
-```jsx
-const template = (
-  <ul>
-    {<li>item1</li>}
-    {<li>item1</li>}
-  </ul>
-);
-```
-
-Ouptut
-
-```html
-<ul>
-    <li>item1</li>
-    <li>item2</li>
-</ul>
-```
-
-<!-- prettier-ignore -->
-***
-
-### Arrays
-
-create array of jsx (reactElements)
-
-```jsx
-const names = ['john', 'peter', 'bob'];
-const listItems = names.map(name => {
-  return <li>{name}</li>;
-});
-```
-
-<!-- prettier-ignore -->
-```jsx
-const template = (
-  <ul>{listItems}</ul>
-)
-```
-
-or
-
-```jsx
-const names = ['john', 'peter', 'bob'];
-const template = (
-  <ul>
-    {names.map(name => {
-      return <li>{name}</li>;
-    })}
-  </ul>
-);
-```
-
-<!-- prettier-ignore -->
-***
-
-### Arrays
-
-Oops, we have an error
-
-<img src="./images/react-array-errror.png">
-
-fix
-
-```jsx
-const names = ['john', 'peter', 'bob'];
-const template = (
-  <ul>
-    {names.map(((name, index) => {
-      return <li key={index}>{name}</li>;
-    })}
-  </ul>
-);
-```
-
-<!-- prettier-ignore -->
-***
-
-### Arrays
 
 Typical use
 
@@ -545,209 +409,41 @@ const template = (
 );
 ```
 
-> Try to avoid map index when possible!
-
-[More info](https://reactjs.org/docs/lists-and-keys.html#keys)
+> The key attribute is required
 
 <!-- prettier-ignore -->
 ***
 
-## JSX vs DOM elements
+## Differences In Attributes
 
 ```jsx
-const template = (
-  <div>
-    <
-    <button type="button" id="btn1" class="btn" tabindex="2">
-      Click me
-    </button>
-  </div>
+const App = () => (
+  <button type="button" id="btn1" class="btn" tabindex="2">
+    Click me
+  </button>
 );
+
+// --> ERROR: INvalid DOM Property 'class'
 ```
-
-Oops errors
-
-<img src="./images/react-attribute-error.png" width="850px">
 
 JSX is still JavaScript, can't use reserved keywords.
 
-ESLint will also capture these errors.
-
-<!-- prettier-ignore -->
-***
-
-### JSX vs DOM elements
-
-class vs className
-
 <!-- prettier-ignore -->
 ```jsx
-const template = (
-  <div>
-    <button type="button" id="btn1"
-            className="btn" tabIndex="2">
-      Click me
-    </button>
-  </div>
+const App = () => (
+  <button type="button" className="btn" tabIndex="2">
+    Click me
+  </button>
 );
 ```
-
-> Some attributes have customized names.
 
 See [React Supported DOM Elements](https://reactjs.org/docs/dom-elements.html)
-
-<!-- prettier-ignore -->
-***
-
-## Event Handling
-
-```jsx
-let counter = 0;
-const addOne = event => {
-  console.log('clicked', event);
-};
-const template = (
-  <div>
-    <button onClick={addOne}>+</button>
-  </div>
-);
-```
-
-Event are camel-cased.
-
-The event handler will receive a [SyntheticEvent](https://reactjs.org/docs/events.html) <br> (a cross-browser wrapper around the browser’s native event)
-
-Almost all browser [events](https://reactjs.org/docs/events.html#supported-events) are supported.
-
-<!-- prettier-ignore -->
-***
-
-### Event Handling
-
-This doesn't work
-
-```jsx
-let counter = 0;
-const addOne = () => {
-  console.log('clicked');
-  counter = counter + 1;
-};
-const template = (
-  <div>
-    <p>{counter}</p>
-
-    <button onClick={addOne}>+</button>
-    <button onClick={() => counter--}>-</button>
-  </div>
-);
-```
-
-The `counter` is NOT automatically updated in the page.
-
-> JSX doesn't support data binding! <br>Its just rendering the value.
-
-<!-- prettier-ignore -->
-***
-
-### Event Handling
-
-Fix
-
-```jsx
-let counter = 0;
-const addOne = () => {
-  console.log('clicked');
-  counter = counter + 1;
-};
-render();
-
-function render() {
-  const template = (
-    <div>
-      <p>{counter}</p>
-
-      <button onClick={addOne}>+</button>
-      <button onClick={() => counter--}>-</button>
-    </div>
-  );
-  ReactDOM.render(template, document.getElementById('root'));
-}
-```
-
-The (virtual) DOM is rendered on every change!
-
-<!-- prettier-ignore -->
-***
-
-## Virtual DOM vs DOM
-
-<img src="./images/vdom.png" width="600px">
-
-Direct DOM manipulation is slow. Through the virtual DOM we only apply a patch for the diff.
-
----
-
-# Exercise 1
-
-### User List (JSX)
-
-- Use raw JSX (no react)
-- Show list of users in table
-- Use users list from user.js
-- Styling with bootstrap
-
-<br>
-### Tips
-
-```
-// install bootstrap 3.x
-
-  yarn add bootstrap@3
-
-// import bootstrap
-
-  import 'bootstrap/dist/css/bootstrap.css';
-
-// doc: styling
-
-  https://www.w3schools.com/bootstrap/bootstrap_tables.asp
-```
 
 ---
 
 # Components
 
 > The building blocks of React
-
-<!-- prettier-ignore -->
-***
-
-## App Components
-
-<img src="./images/app-components.png" width="600px">
-
-<!-- prettier-ignore -->
-***
-
-## App Components
-
-Abstract component tree
-
-```html
-<App>
-    <Header/>
-    <Navigation>
-    <div>
-        <Network>
-            <Line />
-        </Network>
-        <Predictions>
-            <DepartureBoard />
-            <DepartureBoard />
-        </Predictions>
-    </div>
-</App>
-```
 
 <!-- prettier-ignore -->
 ***
@@ -761,9 +457,11 @@ function Welcome() {
 ```
 
 ```jsx
+// welcome.jsx
 const Welcome = () => {
   return <h1>Welcome</h1>;
 };
+export default Welcome;
 ```
 
 > Most component should be functional component
@@ -771,25 +469,7 @@ const Welcome = () => {
 <!-- prettier-ignore -->
 ***
 
-## Functional Component
-
-You can use the component in any JSX expression
-
-```jsx
-const template = (
-  <div>
-    <h1>Title</h1>
-    <Welcome />
-  </div>
-);
-```
-
-<!-- prettier-ignore -->
-***
-
 ## Class Component
-
-User-Defined Components names are Capitalized
 
 ```
 // Welcome.js
@@ -802,9 +482,24 @@ export default class Welcome extends Component {
 }
 ```
 
-JSX assumes a React object is available, so make sure to import it.
-
 Place all components in separated files (capitalized)
+
+<!-- prettier-ignore -->
+***
+
+## Component Nesting
+
+You can use the component in any JSX expression
+
+```jsx
+import Welcome from './welcome';
+const App = () => (
+  <div>
+    <h1>Title</h1>
+    <Welcome />
+  </div>
+);
+```
 
 <!-- prettier-ignore -->
 ***
@@ -830,49 +525,24 @@ export default class App extends Component {
 <!-- prettier-ignore -->
 ***
 
-## Component State
+## SetState
 
-Default state
-
-```jsx
-export default class MyComponent extends Component {
-  state = {
-    title: 'My Component Title'
-    counter: this.props.initialValue || 0,
-  };
-  // ...
-}
-```
-
-Default state through constructor
-
-```jsx
-export default class MyComponent extends Component {
-  constructor() {
-    super();
-    state = {
-      counter: 0,
-    };
-  }
-  // ...
-}
-```
-
-<!-- prettier-ignore -->
-***
-
-## Component State
-
-Set state via callback
+Set state via setState function
 
 ```js
-this.setState((state, props) => ({
+this.setState((state) => ({
   ...state
   counter: 1,
 }));
 ```
 
-Via callback the previous state & props are available.
+```js
+userService.getAll().then(users => {
+  this.setState(() => ({
+    users,
+  }));
+});
+```
 
 <!-- prettier-ignore -->
 ***
@@ -881,9 +551,9 @@ Via callback the previous state & props are available.
 
 ```jsx
 class MyComponent extends React {
-  onClick() {
-    console.log('clicked');
-  }
+  onClick = evt => {
+    console.log('clicked', evt);
+  };
   render() {
     return (
       <div>
@@ -895,35 +565,6 @@ class MyComponent extends React {
 }
 ```
 
-<!-- prettier-ignore -->
-***
-
-### Event Handlers
-
-Be aware of the this reference
-
-```jsx
-class MyComponent extends React {
-  constructor(props) {
-    super(props);
-    this.onClickFix1 = this.onClickFix1.bind(this);
-  }
-
-  onClick() {
-    // BAD: this is not referencing the component
-    console.log('props', this.props);
-  }
-
-  onClickFix1() {
-    console.log('props', this.props);
-  }
-
-  onClickFix2 = () => {
-    console.log('props', this.props);
-  };
-}
-```
-
 ---
 
 # Exercise 2
@@ -932,18 +573,12 @@ class MyComponent extends React {
 
 - App Component
 - Toggle visibility of some text with a button
-- Try to have multiple solutions
 
 <br>
 ### Tip
 
 ```
-<!-- toggle text solution 1 -->
 <p>This is some text</p>
-
-<!-- toggle text solution 2 -->
-<p>This is some other text</p>
-
 <button>Toggle Text</button>
 ```
 
@@ -952,30 +587,6 @@ class MyComponent extends React {
 # Props
 
 > The in and outs of the components
-
-<!-- prettier-ignore -->
-***
-
-## Compose Components
-
-```jsx
-// App.js
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import Welcome from './Welcome';
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Title</h1>
-        <Welcome />
-      </div>
-    );
-  }
-}
-ReactDOM.render(<App />, document.getElementById('root'));
-```
 
 <!-- prettier-ignore -->
 ***
@@ -1137,17 +748,7 @@ export default class MyComponent extends Component {
 
 # Exercise 3
 
-### Alert Component (Props)
-
-- Create alert component with [bootstrap styling](https://www.w3schools.com/bootstrap/bootstrap_alerts.asp)
-
-```
-<Alert>This is information message</Alert>
-<Alert type="danger">We have a problem</Alert>
-<Alert type="warning" onClosed={alertClosed}>
-    <strong>Warning!</strong> Better check yourself, you're not looking too good.
-</Alert>
-```
+### T.B.D
 
 <br>
 ### Tips
@@ -1161,86 +762,6 @@ export default class MyComponent extends Component {
 # Debugging
 
 > Get that app under control
-
-<!-- prettier-ignore -->
-***
-
-## Console.log
-
-console logging is your friend
-
-```js
-// you can log an object
-console.log(user);
-```
-
-```js
-// log multiple vars
-console.log(name + ' ' + age); // don't use this
-console.log(name, age); // both are logged
-console.log({ name, age }); // with names
-```
-
-```js
-// log in table form
-const users = [{ id: 1, name: 'peter' }, { id: 2, name: 'bob' }];
-console.table(users);
-```
-
-<!-- prettier-ignore -->
-***
-
-## Console.log
-
-others
-
-```js
-// timing
-console.time('myTiming');
-longRunningTask();
-console.endTime('myTiming'); // OUTPUT: myTiming xxxxms
-```
-
-```js
-// grouping
-console.group('URL Details');
-console.log('Scheme: ', schema);
-console.log('Host: ', host);
-console.groupEnd();
-```
-
-<!-- prettier-ignore -->
-***
-
-## Debugger
-
-The chrome debugger is your best friend.
-
-<img src="./images/react-debugger.png" width="600px">
-
-<!-- prettier-ignore -->
-***
-
-### Debugger
-
-Make sure to generate source maps to view source in debugger
-
-```js
-// webpack.config.js
-module.exports = {
-  mode: 'development',
-  output: {
-    // ...
-  },
-  // eval: fast build & generated code
-  // cheap-module-eval-source-map: slower build & orginal code
-  // source-map: full source map files
-  devtool: 'cheap-module-eval-source-map',
-};
-```
-
-More info see
-[WebPack DevTool](https://webpack.js.org/configuration/devtool/#devtool)
 
 <!-- prettier-ignore -->
 ***
@@ -1302,78 +823,19 @@ axios
 <!-- prettier-ignore -->
 ***
 
-## Axios
-
-post
-
-```js
-const todo = {
-  userId: 1,
-  title: 'write some code',
-  completed: false,
-};
-const url = 'http://jsonplaceholder.typicode.com/todos';
-axios.post(url, todo).then(res => {
-  console.log('result', res.data);
-});
-```
-
-delete
-
-```js
-const url = `http://jsonplaceholder.typicode.com/todos/${id}`;
-axios.delete(url).then(res => {
-  console.log('result', res.data);
-});
-```
-
-<!-- prettier-ignore -->
-***
-
-## Axios
-
-custom config
-
-```js
-// api.js
-import axios from 'axios';
-export default axios.create({
-  baseURL: 'https://some-domain.com/api/',
-  timeout: 1000,
-  headers: { 'X-Custom-Header': 'foobar' },
-});
-```
-
-use
-
-```js
-// api/contact.js
-import api from './api';
-
-export default {
-  async getById(id) {
-    const res = await api.get(`contacts/${id}`);
-    return res.data;
-  },
-};
-```
-
-<!-- prettier-ignore -->
-***
-
 ## Axios in React
 
 ```jsx
-import contactApi from './api/contacts';
+import axios from 'axios';
 
 export default class MyComponent extends Component {
   state = {
     contact: {},
   };
   async componentDidMount() {
-    const contact = await contactApi.getById(1);
-    setState({
-      contact,
+    const res = await axios.get(`contacts/${id}`);
+    setState(() => {
+      contact: res.data,
     });
   }
   render() {
