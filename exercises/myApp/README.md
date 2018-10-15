@@ -1,4 +1,4 @@
-# react-webpack
+# myApp
 
 This is a starter project to get up and running with React, ES6+ and Babel quick and easy.
 
@@ -30,3 +30,13 @@ $ yarn test
 - [x] Prettier code formatting
 - [x] Unit Testing with Jest
 - [x] ES linting with ESLint and [AirBnb Style Guide](https://github.com/airbnb/javascript)
+
+## Exercises
+
+### JSX
+
+### Local State & Events
+
+### Loading data
+
+### Components

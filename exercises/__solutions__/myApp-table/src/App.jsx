@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <h1>My first app</h1>
+        <h1>My App - User Table</h1>
         <table className="table">
           <thead>
             <tr>

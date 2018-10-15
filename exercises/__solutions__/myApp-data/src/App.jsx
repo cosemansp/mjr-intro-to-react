@@ -28,7 +28,7 @@ class App extends Component {
     const { users } = this.state;
     return (
       <div className="container">
-        <h1>My first app</h1>
+        <h1>My App - Loading Data</h1>
         <table className="table">
           <thead>
             <tr>

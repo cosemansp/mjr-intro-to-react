@@ -441,6 +441,18 @@ See [React Supported DOM Elements](https://reactjs.org/docs/dom-elements.html)
 
 ---
 
+## Exercise 1
+
+JSX - Render User Table
+
+- Start with exercise/myApp
+- Import users from users.js
+- Show users in table
+
+<img src="./images/MyApp - User Table.png" width="500px">
+
+---
+
 # Components
 
 > The building blocks of React
@@ -567,20 +579,157 @@ class MyComponent extends React {
 
 ---
 
-# Exercise 2
+## Exercise 2
 
-### Toggle Text (Component State & Event)
+Component State & Event
 
-- App Component
-- Toggle visibility of some text with a button
+- Toggle visibility of paragraph with a button
 
-<br>
-### Tip
+<img src="./images/MyApp - Toggle text.png" width="500px">
 
+---
+
+# Debugging
+
+> Get that app under control
+
+<!-- prettier-ignore -->
+***
+
+## React Dev Tools
+
+<img src="./images/devtools-full.gif">
+
+[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+
+---
+
+# Live Cycle
+
+> It's alive
+
+<!-- prettier-ignore -->
+***
+
+## Live Cycle Methods
+
+```jsx
+export default class MyComponent extends Component {
+  constructor(props) {
+    console.log('construction', props);
+  }
+  componentDidMount() {
+    console.log('mounted');
+  }
+  componentDidUpdate(oldProps) {
+    console.log('props changed', { oldProps, props: this.props });
+  }
+  componentWillUnmount() {
+    console.log('bye-bye');
+  }
+  render() {
+    return <p>Hello</p>;
+  }
+}
 ```
-<p>This is some text</p>
-<button>Toggle Text</button>
+
+<!-- prettier-ignore -->
+***
+
+### Live Cycle
+
+<img src="./images/react-lifecycke.jpg" width="800px">
+
+[React lifecycle methods diagram](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+
+---
+
+# Http Requests
+
+> Get the data
+
+<!-- prettier-ignore -->
+***
+
+## Http in React
+
+> React doens't provide a Http library.
+
+#### 3th party libraries
+
+- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) (standardized)
+- [Axios](https://github.com/axios/axios) (most popular)
+- [SuperAgent](https://visionmedia.github.io/superagent/)
+- [Request](https://github.com/request/request)
+
+<!-- prettier-ignore -->
+***
+
+## Axios
+
+```js
+import axios from 'axios';
+
+axios
+  .get('https://swapi.co/api/starships')
+  .then(res => {
+    // success
+    console.log('result', res.data);
+  })
+  .catch(error => {
+    if (error.response) {
+      // The request was made and status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else {
+      // Something happened in setting up the request
+      console.log('Error', error.message);
+    }
+  });
 ```
+
+<!-- prettier-ignore -->
+***
+
+## Axios in React
+
+```jsx
+import axios from 'axios';
+
+export default class MyComponent extends Component {
+  state = {
+    contact: {},
+  };
+  async componentDidMount() {
+    const res = await axios.get(`contacts/${id}`);
+    setState(() => {
+      contact: res.data,
+    });
+  }
+  render() {
+    const { contact } = this.state;
+    return (
+      <div>
+        <h1>Contact</h1>
+        <Contact contact={contact} />;
+      </div>
+    );
+  }
+}
+```
+
+---
+
+## Exercise 3
+
+Loading data
+
+- Refactor user list by loading users.json with axios
+- Add delete action (to remove user)
+
+<img src="./images/MyApp - Loading Data.png" width="500px">
 
 ---
 
@@ -706,220 +855,14 @@ const FancyButton = (props) => {
 
 ---
 
-# Live Cycle
+## Exercise 4
 
-> It's alive
+Component - Props
 
-<!-- prettier-ignore -->
-***
+- Refactor in user container & user component
+- Move the table rendering in its own component
 
-## Live Cycle Methods
-
-```jsx
-export default class MyComponent extends Component {
-  constructor(props) {
-    console.log('construction', props);
-  }
-  componentDidMount() {
-    console.log('mounted');
-  }
-  componentDidUpdate(oldProps) {
-    console.log('props changed', { oldProps, props: this.props });
-  }
-  componentWillUnmount() {
-    console.log('bye-bye');
-  }
-  render() {
-    return <p>Hello</p>;
-  }
-}
-```
-
-<!-- prettier-ignore -->
-***
-
-### Live Cycle
-
-<img src="./images/react-lifecycke.jpg" width="800px">
-
-[React lifecycle methods diagram](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
-
----
-
-# Exercise 3
-
-### T.B.D
-
-<br>
-### Tips
-
-```
-// T.B.D
-```
-
----
-
-# Debugging
-
-> Get that app under control
-
-<!-- prettier-ignore -->
-***
-
-## React Dev Tools
-
-<img src="./images/devtools-full.gif">
-
-[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
-
----
-
-# Http Requests
-
-> Get the data
-
-<!-- prettier-ignore -->
-***
-
-## Http in React
-
-> React doens't provide a Http library.
-
-#### 3th party libraries
-
-- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) (standardized)
-- [Axios](https://github.com/axios/axios) (most popular)
-- [SuperAgent](https://visionmedia.github.io/superagent/)
-- [Request](https://github.com/request/request)
-
-<!-- prettier-ignore -->
-***
-
-## Axios
-
-```js
-import axios from 'axios';
-
-axios
-  .get('https://swapi.co/api/starships')
-  .then(res => {
-    // success
-    console.log('result', res.data);
-  })
-  .catch(error => {
-    if (error.response) {
-      // The request was made and status code
-      // that falls out of the range of 2xx
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else {
-      // Something happened in setting up the request
-      console.log('Error', error.message);
-    }
-  });
-```
-
-<!-- prettier-ignore -->
-***
-
-## Axios in React
-
-```jsx
-import axios from 'axios';
-
-export default class MyComponent extends Component {
-  state = {
-    contact: {},
-  };
-  async componentDidMount() {
-    const res = await axios.get(`contacts/${id}`);
-    setState(() => {
-      contact: res.data,
-    });
-  }
-  render() {
-    const { contact } = this.state;
-    return (
-      <div>
-        <h1>Contact</h1>
-        <Contact contact={contact} />;
-      </div>
-    );
-  }
-}
-```
-
----
-
-# Exercise
-
-### Web Shop
-
-- Create app to show products grid
-- Load products from API
-  [https://euri-test-api.now.sh](https://euri-test-api.now.sh)
-- Show following fields
-  - Image, Sku, Title, Stock, Price, Discount
-- Style with bootstrap
-- Optional: add an error message when the communication fails
-- Optional: load more products when scrolling down, use [react-infinite-scroller](https://cassetterocks.github.io/react-infinite-scroller/demo/)
-
----
-
-# Production
-
-> Don't put your development in production
-
-<!-- prettier-ignore -->
-***
-
-### NODE_ENV === "production"
-
-The environment at build time is controlled by
-
-```
-// webpack.config.js
-new webpack.DefinePlugin({
-  'process.env.NODE_ENV': JSON.stringify('production')
-}),
-new webpack.optimize.UglifyJsPlugin()
-```
-
-during build you get an uptimized build to production.
-
-for example:
-
-```js
-if (process.NODE_ENV === 'production') {
-  // production mode
-}
-```
-
-<!-- prettier-ignore -->
-***
-
-## Loglevel
-
-Minimal lightweight logging for JavaScript
-
-```bash
-# Add dependencies
-yarn install loglevel
-```
-
-use
-
-```js
-import log from 'loglevel';
-
-// Set the logLevel
-log.setLevel(process.NODE_ENV === 'production' ? 'warn' : 'info');
-
-// some other place in the program
-log.warn('something is wrong here');
-log.debug('details', result);
-```
+<img src="./images/MyApp - Component.png" width="500px">
 
 ---
 

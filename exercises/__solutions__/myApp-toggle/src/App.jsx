@@ -19,7 +19,7 @@ class App extends Component {
     const { showText } = this.state;
     return (
       <div className="container">
-        <h1>My first app - Toggle Text</h1>
+        <h1>My App - Toggle Text</h1>
         {showText && (
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
