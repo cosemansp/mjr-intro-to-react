@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { hot } from 'react-hot-loader';
 import './App.css';
 
 class App extends Component {
@@ -37,6 +36,4 @@ class App extends Component {
   }
 }
 
-// hot export to enable hot reloading of react components
-// export default App;
-export default hot(module)(App);
+export default App;
