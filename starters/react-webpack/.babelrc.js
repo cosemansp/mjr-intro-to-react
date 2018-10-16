@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    [require('@babel/preset-env'), { debug: true }],
+    [require('@babel/preset-env'), { debug: false }],
     [require('@babel/preset-react'), { modules: false }],
     require('@babel/preset-flow'),
   ],

@@ -238,15 +238,17 @@ See also [Babel REPL](https://babeljs.io/repl/#?babili=false&browsers=&build=&bu
 ## Simple component
 
 ```js
+// component is just a function
 function App() {
     return <h1>Hello World of React<h1>
 }
 
+// you can use the component in your jsx
 ReactDom.render(<App/>, document.getElementById('app'));
 ```
 
 ```js
-// arrow function expression
+// Other Style (preferred): arrow function expression
 const App = () => <h1>Hello World of React<h1>
 ```
 
@@ -348,16 +350,19 @@ An object can't be rendered
 
 ## Conditional rendering
 
-ternary operator
+ternary operator (if/else)
 
 ```jsx
 const App = () => <p>User: {user.name ? user.name : '-'}</p>;
 ```
 
-logical and operator
+logical and operator (if)
 
 ```jsx
 const userAge = (
+	{user.age && <p>Age: user.age</p>}
+)
+const userAgeOrderThen18 = (
 	{user.age && user.age >= 18 && <p>Age: user.age</p>}
 )
 ```
